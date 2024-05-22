@@ -9,7 +9,7 @@ export type TInventory = {
 };
 
 export type TProduct = {
-  id: string;
+  productId: string;
   name: string;
   description: string;
   price: number;
