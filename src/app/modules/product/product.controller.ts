@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { ProductServices } from './product.service';
-import { z } from 'zod';
 import productValidationSchema from './product.validation';
 
 // COntroller for creating a product
@@ -19,8 +18,12 @@ const createProduct = async (req: Request, res: Response) => {
       message: 'Product Added Successfully',
       data: result,
     });
-  } catch (err) {
-    console.log(err);
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || 'Something went wrong',
+      error: err,
+    });
   }
 };
 
@@ -33,8 +36,12 @@ const getAllProducts = async (req: Request, res: Response) => {
       message: 'Products Retrived Successfully',
       data: result,
     });
-  } catch (err) {
-    console.log(err);
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || 'Something went wrong',
+      error: err,
+    });
   }
 };
 
@@ -48,8 +55,32 @@ const getSingleProducts = async (req: Request, res: Response) => {
       message: 'Product Retrived Successfully',
       data: result,
     });
-  } catch (err) {
-    console.log(err);
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || 'Something went wrong',
+      error: err,
+    });
+  }
+};
+
+// Function for delete product
+const deleteProducts = async (req: Request, res: Response) => {
+  try {
+    const { productId } = req.params;
+    const result = await ProductServices.deleteProductFromDB(productId);
+
+    res.status(200).json({
+      success: true,
+      message: 'Product Deleted Successfully',
+      data: result,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || 'Something went wrong',
+      error: err,
+    });
   }
 };
 
@@ -57,4 +88,5 @@ export const ProductControllers = {
   createProduct,
   getAllProducts,
   getSingleProducts,
+  deleteProducts,
 };

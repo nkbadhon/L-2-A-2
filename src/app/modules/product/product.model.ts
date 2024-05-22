@@ -69,6 +69,25 @@ const productSchema = new Schema<TProduct>({
     required: true,
     message: 'Product inventory details are required.',
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+// Query Middleware for deletion
+
+productSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+productSchema.pre('findOne', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+productSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+  next();
 });
 
 // Creating model for productSchema
