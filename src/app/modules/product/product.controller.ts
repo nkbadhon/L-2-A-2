@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { ProductServices } from './product.service';
 import productValidationSchema from './product.validation';
+import { TProduct } from './product.interface';
 
 // COntroller for creating a product
 const createProduct = async (req: Request, res: Response) => {
@@ -115,10 +116,34 @@ const getSearchProducts = async (req: Request, res: Response) => {
   }
 };
 
+//Function for update a product
+const updateSingleProducts = async (req: Request, res: Response) => {
+  try {
+    const { productId } = req.params;
+    const updateData = req.body;
+
+    const result: TProduct | null =
+      await ProductServices.updateSingleProductFromDB(productId, updateData);
+
+    res.status(200).json({
+      success: true,
+      message: 'Product Updated Successfully',
+      data: result,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || 'Something went wrong',
+      error: err,
+    });
+  }
+};
+
 export const ProductControllers = {
   createProduct,
   getAllProducts,
   getSingleProducts,
   deleteProducts,
   getSearchProducts,
+  updateSingleProducts,
 };

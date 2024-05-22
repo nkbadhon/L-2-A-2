@@ -27,10 +27,21 @@ const deleteProductFromDB = async (productId: string) => {
   return result;
 };
 
+// Update
+const updateSingleProductFromDB = async (
+  productId: string,
+  updateData: Partial<TProduct>,
+) => {
+  return await ProductModel.findOneAndUpdate({ productId }, updateData, {
+    new: true,
+  });
+};
+
 export const ProductServices = {
   createProductInDB,
   getAllProductFromDB,
   getSingleProductFromDB,
   deleteProductFromDB,
   getSearchProductFromDB,
+  updateSingleProductFromDB,
 };
