@@ -3,7 +3,7 @@ import { ProductServices } from './product.service';
 
 const createProduct = async (req: Request, res: Response) => {
   try {
-    const product = req.body;
+    const { product } = req.body;
 
     // will call service function to send this data
     const result = await ProductServices.createProductInDB(product);

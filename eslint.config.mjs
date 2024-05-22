@@ -4,11 +4,6 @@ import tseslint from 'typescript-eslint';
 
 export default [
   {
-    extends: [
-      'eslint:recommended',
-      'plugin:@typescript-eslint/recommended',
-      'prettier',
-    ],
     ignores: ['**/node_modules/', '.dist/'],
     languageOptions: {
       globals: {
