@@ -13,6 +13,8 @@ const createProduct = async (req: Request, res: Response) => {
 
     // will call service function to send this data
     const result = await ProductServices.createProductInDB(zodParseData);
+
+    //
     // send response to the user
     res.status(200).json({
       success: true,
@@ -28,36 +30,30 @@ const createProduct = async (req: Request, res: Response) => {
   }
 };
 
-// Function for getting all of the products
+// Single and all product
 const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const result = await ProductServices.getAllProductFromDB();
-
-    res.status(200).json({
-      success: true,
-      message: 'Products Retrived Successfully',
-      data: result,
-    });
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message || 'Something went wrong',
-      error: err,
-    });
-  }
-};
-
-// FUnction to get a single product based on productId
-const getSingleProducts = async (req: Request, res: Response) => {
-  try {
+    let result;
     const { productId } = req.params;
-    const result = await ProductServices.getSingleProductFromDB(productId);
 
-    res.status(200).json({
-      success: true,
-      message: 'Product Retrived Successfully',
-      data: result,
-    });
+    // Checking either it is searching for the specific product
+
+    if (productId) {
+      result = await ProductServices.getSingleProductFromDB(productId);
+      res.status(200).json({
+        success: true,
+        message: `Product (${productId}) Retrived Successfully`,
+        data: result,
+      });
+    } else {
+      // Otherwise, fetch all products
+      result = await ProductServices.getAllProductFromDB();
+      res.status(200).json({
+        success: true,
+        message: 'All Products Retrived Successfully',
+        data: result,
+      });
+    }
   } catch (err: any) {
     res.status(500).json({
       success: false,
@@ -104,7 +100,7 @@ const getSearchProducts = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      message: `Products matching search term '${searchTerm}' fetched successfully!`,
+      message: `Products  fetched successfully!`,
       data: result,
     });
   } catch (err: any) {
@@ -142,7 +138,6 @@ const updateSingleProducts = async (req: Request, res: Response) => {
 export const ProductControllers = {
   createProduct,
   getAllProducts,
-  getSingleProducts,
   deleteProducts,
   getSearchProducts,
   updateSingleProducts,
